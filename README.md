@@ -5,6 +5,7 @@
 ![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ 功能特性
 
