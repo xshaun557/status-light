@@ -98,6 +98,30 @@ node qa-ui-check.mjs   # 前端布局 / 媒体查询静态校验（34 项）
 - **WorkBuddy 技能市场**：平台暂无自动发布入口，分发方式为分享 `status-light.zip`，对方解压到 `~/.workbuddy/skills/status-light/` 即生效。
 - **GitHub**：本仓库即技能根目录，clone 后把内容放到 `~/.workbuddy/skills/status-light/` 即可。
 
+## ❓ 常见问题（FAQ）
+
+### 手机打不开网页 / 转圈超时 / 无法连接
+九成是**手机和 PC 不在同一网段**（路由器 / AP 把「手机 → PC」反向流量隔离了）。先核对：
+
+- **PC 局域网 IP**：命令行 `ipconfig` 看「IPv4 地址」（例如 `10.220.221.57`）。
+- **手机 IP**：手机 Wi-Fi 详情里看（例如 `10.220.205.118`）。
+- **判断标准**：两者 IP 通常应在同一段（如手机 `205.x`、PC `221.x` 属于相邻但不同的 `/20` 子网，就不通）。手机浏览器要打开的是 **PC 的 IP**，不是手机自己的 IP。
+
+**修复（二选一）：**
+
+1. **让手机连与 PC 同一个 Wi-Fi**（避开访客网络、双频分网）。手机重连后 IP 应变成与 PC 同段，再打开 `http://<PC的IP>:8765`。
+2. **用 Windows 移动热点（最稳，直接绕开路由器隔离）**：`设置 → 网络和 Internet → 移动热点` 开启（共享自 WLAN），手机连该热点，浏览器打开 `http://192.168.137.1:8765`。
+
+> 前提：server 已启动且防火墙放行 8765。若同网段仍连不上，可加一条**端口级**入站规则（覆盖任意 node 进程，需管理员）：
+> `netsh advfirewall firewall add rule name="StatusLight-8765" dir=in action=allow protocol=TCP localport=8765`
+
+### 灯不亮 / 状态没变化
+- 先查服务在不在：`curl -s localhost:8765/state` 应返回 JSON（如 `{"state":"idle"}`）。无返回说明 server 没起，先 `node server.js`。
+- 服务在但灯不变：确认当前任务的助理是否加载并遵循了 `SKILL.md` 的打灯约定（见上文「在任意任务启用」三选一）。
+
+### iOS 没声音
+语音需用户首次手势解锁：在手机页面**先点一下**（任意位置），再切状态即可听到播报；右上角有静音按钮可随时关闭。
+
 ## 📁 目录结构
 
 ```
